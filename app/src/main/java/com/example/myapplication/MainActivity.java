@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
         webView.loadUrl("http://4x.ink:5212/"); // 替换为你的URL
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
