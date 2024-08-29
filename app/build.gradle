@@ -14,6 +14,7 @@ android {
         versionName "1.00.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     // 自定义打包名称
     android.applicationVariants.all { variant ->
         variant.outputs.all {
