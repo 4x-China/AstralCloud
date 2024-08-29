@@ -29,11 +29,16 @@ OkHttp: HTTP 客户端
 Glide: 图片加载库
 
 Room: 数据库操作
+## 实机照片
+<img src="http://www.godserver.cn/wp-content/uploads/2024/08/Screenshot_2024-08-29-22-48-39-03_ee015900260ab50.jpg" width="400" >
+<img src="http://www.godserver.cn/wp-content/uploads/2024/08/Screenshot_2024-08-29-22-48-29-68_ee015900260ab50.jpg" width="400">
+<img src="http://www.godserver.cn/wp-content/uploads/2024/08/beb39f60d3d3c2fa09636a3233610b26.jpg" width="800">
 
 ## 贡献指南
 欢迎社区成员参与 AstralCloud 的开发与维护！如果您有任何改进建议或发现 bug，请通过以下方式联系我们：
 - 提交 issue 到 Git 仓库 
 - 发送邮件至 astralpath@163.com
 - 加入我们的 Discord 社区讨论
+
 ## 许可证
 本项目遵循 MIT 开源许可证协议发布。更多信息请参阅 LICENSE 文件。
