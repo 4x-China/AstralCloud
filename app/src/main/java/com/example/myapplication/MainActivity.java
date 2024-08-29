@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.webkit.*;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -34,7 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@SuppressLint({"MissingInflatedId", "LocalSuppress"})
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
     private Runnable hideButtonRunnable;
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         button = findViewById(R.id.button2);
         hideButtonDelayed(5000);  // 3秒后隐藏按钮
         button.setVisibility(View.VISIBLE);
@@ -59,12 +59,34 @@ public class MainActivity extends AppCompatActivity {
                 // 加载新的布局文件
                 LayoutInflater inflater = getLayoutInflater();
                 View newView = inflater.inflate(R.layout.content_main, null);
-                Intent intent = new Intent(MainActivity.this, FirstFragment.class);
-                startActivity(intent);
                 // 替换当前的布局
                 ViewGroup rootView = (ViewGroup) findViewById(android.R.id.content);
                 rootView.removeAllViews();
                 rootView.addView(newView);
+
+                setContentView(R.layout.content_main);
+                Button button4 = findViewById(R.id.button5);
+                button4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(android.view.View v) {
+                        EditText serverip = findViewById(R.id.edit_text);
+                        writeToFile(serverip.getText().toString());
+                        Toast.makeText(getApplicationContext(),"change CloudReveIP 重启即可生效!",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Button button7 = findViewById(R.id.button6);
+                button7.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(android.view.View v) {
+                        Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+
+                    }
+                });
+                TextView textView = findViewById(R.id.textView2);
+                textView.setText(get());
+                Toast.makeText(MainActivity.this,"change CloudReveIP",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -163,7 +185,9 @@ public class MainActivity extends AppCompatActivity {
         String ip = readFile();
         Log.d("地址",ip);
         if (ip.isEmpty()) {
+            Toast.makeText(MainActivity.this,"未设置CloudReveIP或设置失败",Toast.LENGTH_SHORT).show();
             webView.loadUrl("http://4x.ink:5212/"); // 替换为你的URL
+            writeToFile("http://4x.ink:5212/");
         }else{
             webView.loadUrl(ip);
         }
@@ -222,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 button.animate().alpha(0).setDuration(2000).start();
+                button.setEnabled(false);
 
             }
         };
@@ -237,5 +262,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         cancelHideButtonTask();  // 在Activity销毁时取消定时任务
+    }
+
+    private String get(){
+        String content = "Privacy policy\n" +
+                "Last modified on Jun 4, 2022\n" +
+                "\n" +
+                "Privacy Policy\n" +
+                "By using our website or apps, you consent to our privacy policy by default.\n" +
+                "\n" +
+                "We do not collect any personal information, especially private information, from any files/binary released from official sources, including but not limited to Cloudreve Community Edition, Cloudreve Pro Edition and Cloudreve iOS Client, all of them will not collect anything from user.\n" +
+                "\n" +
+                "We can guarantee that no personal information is collected on any files released from official sources, but websites built by Cloudreve Community/Pro Edition and any secondary development sites are at the discretion of the administrator and are not subject to this provision.\n" +
+                "\n" +
+                "Policy Change Timeline\n" +
+                "The privacy policy will follow the Cloudreve version published, we reserve the right to modify the privacy policy document any time.";
+        return content;
     }
 }
