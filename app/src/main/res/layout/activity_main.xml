@@ -27,4 +27,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_anchorGravity="bottom|center"
             app:layout_anchor="@+id/webview" android:id="@+id/button2"/>
+    <Button
+            android:text="返回"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:layout_anchorGravity="start|bottom"
+            app:layout_anchor="@+id/webview"
+            android:id="@+id/backbutton"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:enabled="false"
+            android:visibility="gone"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

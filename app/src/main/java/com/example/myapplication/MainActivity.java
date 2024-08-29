@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -34,25 +35,33 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 @SuppressLint({"MissingInflatedId", "LocalSuppress"})
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
+    private String cloudreveip;
     private Runnable hideButtonRunnable;
     private ValueCallback<Uri> valueCallback;
     private ValueCallback<Uri[]> valueCallbackArray;
+    private boolean temp=true;
     private Button button;
     private final int REQUEST_CODE = 0x1010;
     private Handler handler = new Handler();
     private final static int RESULT_CODE = 0x1011;
+    private Stack<String> history = new Stack<>();
+    private View backButton;
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button2);
-        hideButtonDelayed(5000);  // 3秒后隐藏按钮
+        backButton = findViewById(R.id.backbutton);
+        hideButtonDelayed(3000);  // 3秒后隐藏按钮
         button.setVisibility(View.VISIBLE);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
@@ -89,7 +98,17 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"change CloudReveIP",Toast.LENGTH_SHORT).show();
             }
         });
+        // 设置按钮点击事件
+        backButton.setOnClickListener(v -> {
+            history.pop();
+            webView.goBack();
 
+        });
+
+        /**
+         * 以上是按钮和页面部分
+         * 下方是 webview 部分
+         */
         webView = findViewById(R.id.webview);
         WebSettings settings = webView.getSettings();
         settings.setDatabaseEnabled(true);
@@ -136,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+
                 // 页面加载完成
             }
 
@@ -146,7 +166,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
 
+                if (newProgress == 100) {
+                    // 页面加载完成时更新按钮状态
+                    backButton.setEnabled(webView.canGoBack());
+                    history.push(webView.getUrl());
+
+                    String r = webView.getUrl().replace(cloudreveip,"");
+                    r = r.replace("home?path=%2F","").replace("/","");
+                    if (r.equals("")) {
+                        webView.clearHistory();
+                    }
+                    if (webView.canGoBack()) {
+                        backButton.setVisibility(View.VISIBLE);
+                    } else {
+                        backButton.setVisibility(View.GONE);
+                    }
+
+                }
+            }
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
@@ -183,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
             WebView.setWebContentsDebuggingEnabled(true);
         }
         String ip = readFile();
+        cloudreveip = ip;
         Log.d("地址",ip);
         if (ip.isEmpty()) {
             Toast.makeText(MainActivity.this,"未设置CloudReveIP或设置失败",Toast.LENGTH_SHORT).show();
@@ -278,5 +320,12 @@ public class MainActivity extends AppCompatActivity {
                 "Policy Change Timeline\n" +
                 "The privacy policy will follow the Cloudreve version published, we reserve the right to modify the privacy policy document any time.";
         return content;
+    }
+    public int getHistoryCount() {
+        if (webView != null) {
+            WebBackForwardList history2 = webView.copyBackForwardList();
+            return history2.getSize();
+        }
+        return 0;
     }
 }
