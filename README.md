@@ -23,11 +23,8 @@ AstralCloud 是一款专为 Android 设计的高效、安全的网盘手机客�
 架构模式：MVVM (Model-View-ViewModel)
 ## 依赖库：
 Retrofit: 网络请求处理
-
 OkHttp: HTTP 客户端
-
 Glide: 图片加载库
-
 Room: 数据库操作
 ## 实机照片
 <img src="http://www.godserver.cn/wp-content/uploads/2024/08/Screenshot_2024-08-29-22-48-39-03_ee015900260ab50.jpg" width="400" >
