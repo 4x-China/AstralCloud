@@ -37,4 +37,12 @@
             android:layout_centerHorizontal="true"
             android:enabled="false"
             android:visibility="gone"/>
+    <TextView
+            android:text="Error"
+            android:layout_width="331dp"
+            android:layout_height="471dp" app:layout_anchorGravity="center" app:layout_anchor="@+id/webview"
+            android:id="@+id/textViewError"
+            android:textSize="24sp"
+    android:visibility="gone"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

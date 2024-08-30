@@ -3,6 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                      tools:ignore="ScopedStorage"/>
     <application
@@ -22,7 +23,8 @@
                 android:label="AstralCloud"
                 android:roundIcon="@drawable/icon_xxhdpi"
                 android:icon="@drawable/icon_xxhdpi"
-                android:theme="@style/Theme.MyApplication">
+                android:theme="@style/Theme.MyApplication"
+                android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
