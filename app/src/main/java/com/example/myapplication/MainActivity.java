@@ -10,14 +10,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.*;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.webkit.*;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
          * 绑定按钮
          */
         setContentView(R.layout.activity_main);
+
         button = findViewById(R.id.button2);
         backButton = findViewById(R.id.backbutton);
         hideButtonDelayed(3000);  // 3秒后隐藏按钮
@@ -104,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> {
             history.pop();
             webView.goBack();
-
+            TextView error = findViewById(R.id.textViewError);
+            error.setVisibility(View.GONE);
         });
 
         /**
@@ -165,6 +167,18 @@ public class MainActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 // 页面开始加载
+            }
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                Log.d("error",error.toString());
+                webView.setVisibility(View.GONE);
+                TextView textViewerror = findViewById(R.id.textViewError);
+                textViewerror.setVisibility(View.VISIBLE);
+                textViewerror.setText("页面错误! \n 访问的URL是 \n " + request.getUrl() + " \n如果网址存在则请检查网络或权限");
+
+                // 页面加载错误
             }
         });
         webView.setWebChromeClient(new WebChromeClient(){
@@ -236,6 +250,23 @@ public class MainActivity extends AppCompatActivity {
             webView.loadUrl(ip);
         }
 
+        // 检查是否有权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                // 显示提示信息给用户
+                Toast.makeText(this, "需要权限来显示画中画 ", Toast.LENGTH_SHORT).show();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                // 引导用户到权限管理页面
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                Toast.makeText(this, "需要权限来显示画中画 ", Toast.LENGTH_SHORT).show();
+                startActivityForResult(intent, 1);
+            }
+        }
     }
 
     @Override
@@ -290,6 +321,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 button.animate().alpha(0).setDuration(2000).start();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 button.setEnabled(false);
 
             }
