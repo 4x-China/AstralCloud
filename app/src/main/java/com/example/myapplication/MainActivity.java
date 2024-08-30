@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int RESULT_CODE = 0x1011;
     private Stack<String> history = new Stack<>();
     private View backButton;
+    private boolean ifyes = true;
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +104,16 @@ public class MainActivity extends AppCompatActivity {
         });
         // 设置按钮点击事件
         backButton.setOnClickListener(v -> {
-            history.pop();
-            webView.goBack();
-            TextView error = findViewById(R.id.textViewError);
-            error.setVisibility(View.GONE);
+            if (ifyes) {
+                history.pop();
+                webView.goBack();
+                TextView error = findViewById(R.id.textViewError);
+                error.setVisibility(View.GONE);
+            } else {
+                Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
         });
 
         /**
@@ -172,13 +179,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                Log.d("error",error.toString());
-                webView.setVisibility(View.GONE);
-                TextView textViewerror = findViewById(R.id.textViewError);
-                textViewerror.setVisibility(View.VISIBLE);
-                textViewerror.setText("页面错误! \n 访问的URL是 \n " + request.getUrl() + " \n如果网址存在则请检查网络或权限");
+                if (!(error.getErrorCode() == -1)) {
+                    Log.d("error", String.valueOf(error.getErrorCode()));
+                    webView.setVisibility(View.GONE);
+                    ifyes = false;
+                    backButton.setVisibility(View.VISIBLE);
+                    backButton.setEnabled(true);
+                    try {
+                        TextView textViewerror = findViewById(R.id.textViewError);
+                        textViewerror.setVisibility(View.VISIBLE);
+                        textViewerror.setText("页面错误! \n 访问的URL是 \n " + request.getUrl() + " \n如果网址存在则请检查网络或权限");
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this,"页面错误! \n 访问的URL是 \n " + request.getUrl() + " \n如果网址存在则请检查网络或权限",Toast.LENGTH_SHORT);
+                    }
 
-                // 页面加载错误
+
+                    // 页面加载错误
+                }
+
             }
         });
         webView.setWebChromeClient(new WebChromeClient(){
