@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /**
-         *  绑定按钮
+         * 绑定按钮
          */
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button2);
