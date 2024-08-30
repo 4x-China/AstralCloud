@@ -230,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
+                Log.d("文件下载地址",url);
                 startActivity(i);
             }
         });
