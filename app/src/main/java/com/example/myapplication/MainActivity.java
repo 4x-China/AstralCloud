@@ -331,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return content.toString();
+
     }
     private void writeToFile(String data) {
         try {
