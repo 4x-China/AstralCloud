@@ -39,7 +39,7 @@
                 android:hint="服务器地址(带协议和端口)"
                 android:inputType="text"/>
         <Button
-                android:text="更改并重启"
+                android:text="设置"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/button5"/>
         <TextView

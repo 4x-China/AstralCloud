@@ -261,10 +261,19 @@ public class MainActivity extends AppCompatActivity {
         String ip = readFile();
         cloudreveip = ip;
         Log.d("地址",ip);
-        if (ip.isEmpty()) {
-            Toast.makeText(MainActivity.this,"未设置CloudReveIP或设置失败",Toast.LENGTH_SHORT).show();
-            webView.loadUrl("http://4x.ink:5212/"); // 替换为你的URL
-            writeToFile("http://4x.ink:5212/");
+        if (ip.equals("null")) {
+            // 加载新的布局文件
+            LayoutInflater inflater = getLayoutInflater();
+            View newView = inflater.inflate(R.layout.content_main, null);
+            // 替换当前的布局
+            ViewGroup rootView = (ViewGroup) findViewById(android.R.id.content);
+            rootView.removeAllViews();
+            rootView.addView(newView);
+
+            setContentView(R.layout.content_main);
+            TextView textView = findViewById(R.id.textView2);
+            textView.setText(get());
+            Toast.makeText(MainActivity.this,"change CloudReveIP",Toast.LENGTH_SHORT).show();
         }else{
             webView.loadUrl(ip);
         }
@@ -318,7 +327,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "读取文件失败", Toast.LENGTH_SHORT).show();
-            writeToFile("http://4x.ink:5212/");
             return "null";
 
         }
