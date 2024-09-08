@@ -60,12 +60,19 @@ public class MainActivity extends AppCompatActivity {
          * 绑定按钮
          */
         setContentView(R.layout.activity_main);
-
+        Button setbutton = findViewById(R.id.button_setting);
         button = findViewById(R.id.button2);
         backButton = findViewById(R.id.backbutton);
         hideButtonDelayed(3000);  // 3秒后隐藏按钮
         button.setVisibility(View.VISIBLE);
 
+        setbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                Intent intent = new Intent(MainActivity.this, Sec.class);
+                startActivity(intent);
+            }
+        });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
