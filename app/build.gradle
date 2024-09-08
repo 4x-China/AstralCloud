@@ -10,7 +10,7 @@ android {
         minSdk 30
         targetSdk 33
         versionCode 1
-        versionName "1.00.10"
+        versionName "1.01.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     // 自定义打包名称
@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-    implementation 'org.adblockplus:adblock-android-webview:4.4.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
