@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Stack;
 
 
+
 @SuppressLint({"MissingInflatedId", "LocalSuppress"})
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
@@ -298,6 +299,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (readFile2().equals("beta=true")) {
+
+        }
+
+
 
         // 开启调试模式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -436,5 +442,21 @@ public class MainActivity extends AppCompatActivity {
                 "The privacy policy will follow the Cloudreve version published, we reserve the right to modify the privacy policy document any time.";
         return content;
     }
+    public String readFile2() {
+        StringBuilder content = new StringBuilder();
+        try {
+            FileInputStream fis = openFileInput("beta.prop");
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            fis.close();
+            content.append(new String(buffer, StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "读取文件失败", Toast.LENGTH_SHORT).show();
+            return "null";
 
+        }
+        return content.toString();
+
+    }
 }
