@@ -30,12 +30,11 @@
                 android:hardwareAccelerated="true"
                 android:configChanges="uiMode|screenSize|smallestScreenSize"
                 android:resizeableActivity="true">
-
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
                 android:name=".Sec">

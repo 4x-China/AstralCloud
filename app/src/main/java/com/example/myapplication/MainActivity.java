@@ -30,6 +30,7 @@ import java.util.Stack;
 @SuppressLint({"MissingInflatedId", "LocalSuppress"})
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
+    private int position = 0;
     private String cloudreveip;
     private Runnable hideButtonRunnable;
     private ValueCallback<Uri> valueCallback;
@@ -152,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
             settings.setMediaPlaybackRequiresUserGesture(false);
         }
 
-
+        /**
+         * 基础浏览器功能实现
+         */
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -197,6 +200,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        /**
+         * 这里是为了图像显示正确
+         */
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        webView.getSettings().setBlockNetworkImage(false);
+
+
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -347,13 +359,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 button.animate().alpha(0).setDuration(2000).start();
+                setbutton.animate().alpha(0).setDuration(2000).start();
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 button.setEnabled(false);
-
+                setbutton.setEnabled(false);
             }
         };
         handler.postDelayed(hideButtonRunnable, delayMillis);
@@ -385,11 +398,5 @@ public class MainActivity extends AppCompatActivity {
                 "The privacy policy will follow the Cloudreve version published, we reserve the right to modify the privacy policy document any time.";
         return content;
     }
-    public int getHistoryCount() {
-        if (webView != null) {
-            WebBackForwardList history2 = webView.copyBackForwardList();
-            return history2.getSize();
-        }
-        return 0;
-    }
+
 }

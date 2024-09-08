@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
                                                    xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    android:alpha="1.0"
+
                                                    tools:context=".MainActivity">
+
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/activity_web"
             android:layout_height="wrap_content"
@@ -13,46 +14,45 @@
             android:fitsSystemWindows="true"
             tools:ignore="MissingConstraints">
 
+        <ImageView
+                android:alpha="0.3"
+                android:background="@drawable/icon_111" android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+        </ImageView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
-    <Switch
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/switch1" tools:layout_editor_absoluteY="94dp"
-            tools:layout_editor_absoluteX="311dp" tools:ignore="MissingConstraints"
-/>
-    <TextView
-            android:text="自动申请权限"
-            android:layout_width="255dp"
-            android:layout_height="34dp" android:id="@+id/textView" tools:layout_editor_absoluteY="90dp"
-            tools:layout_editor_absoluteX="45dp"
-            android:textSize="20dp"
-            tools:ignore="MissingConstraints"/>
-    <TextView
-            android:text="设置"
-            android:layout_width="322dp"
-            android:layout_height="60dp" android:id="@+id/textView3" tools:layout_editor_absoluteY="16dp"
-            tools:layout_editor_absoluteX="16dp"
-            android:textSize="40dp"
-            tools:ignore="MissingConstraints"/>
-    <TextView
-            android:text="R18 ????"
-            android:layout_width="253dp"
-            android:layout_height="39dp" android:id="@+id/textView4" tools:layout_editor_absoluteY="130dp"
-            tools:layout_editor_absoluteX="47dp" tools:ignore="MissingConstraints"
-            android:textSize="20dp"/>
-    <Switch
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/switch2" tools:layout_editor_absoluteY="133dp"
-            tools:layout_editor_absoluteX="311dp" tools:ignore="MissingConstraints"/>
-    <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
-               android:id="@+id/imageView" android:src="@drawable/icon_111"
-    android:alpha="0.3"></ImageView>
-    <Button
-            android:text="返回"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/button_backing" tools:layout_editor_absoluteY="683dp"
-            tools:layout_editor_absoluteX="160dp" tools:ignore="MissingConstraints"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp" android:id="@+id/linearLayout"
+            android:orientation="vertical">
+        <Switch
+                android:text="实验按钮 (启动神奇功能)"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/switch1"/>
+        <Button
+                android:text="返回"
+                android:alpha="1.0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/button_backing"
+                tools:layout_editor_absoluteY="341dp"
+                tools:layout_editor_absoluteX="170dp" tools:ignore="MissingConstraints"/>
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
