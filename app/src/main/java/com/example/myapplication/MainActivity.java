@@ -343,17 +343,20 @@ public class MainActivity extends AppCompatActivity {
         return content.toString();
 
     }
+
     private void writeToFile(String data) {
         try {
             FileOutputStream fos = openFileOutput("serveripcloudreve.prop", MODE_PRIVATE);
             fos.write(data.getBytes());
             fos.close();
-            Toast.makeText(this, "数据已写入文件", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "数据已写入文件" , Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "写入文件失败", Toast.LENGTH_SHORT).show();
         }
     }
+
+
     private void hideButtonDelayed(long delayMillis) {
         hideButtonRunnable = new Runnable() {
             @Override

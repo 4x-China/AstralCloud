@@ -45,7 +45,7 @@
             android:textSize="24sp"
     android:visibility="gone"/>
     <Button
-            android:text="打开设置界面"
+            android:text="设置"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_anchorGravity="end|bottom" app:layout_anchor="@+id/webview"
             android:id="@+id/button_setting"/>

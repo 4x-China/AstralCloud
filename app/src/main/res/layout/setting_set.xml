@@ -17,7 +17,8 @@
         <ImageView
                 android:alpha="0.3"
                 android:background="@drawable/icon_111" android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter">
 
         </ImageView>
         <androidx.constraintlayout.widget.ConstraintLayout
