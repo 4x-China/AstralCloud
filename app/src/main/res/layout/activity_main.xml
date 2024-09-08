@@ -49,5 +49,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_anchorGravity="end|bottom" app:layout_anchor="@+id/webview"
             android:id="@+id/button_setting"/>
-
+    <com.example.myapplication.CircularProgressBar
+            android:id="@+id/circularProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:max="100"
+            android:progress="0" app:layout_anchorGravity="center" app:layout_anchor="@+id/webview"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

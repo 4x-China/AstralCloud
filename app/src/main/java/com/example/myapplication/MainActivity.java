@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,7 @@ import java.util.Stack;
 @SuppressLint({"MissingInflatedId", "LocalSuppress"})
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
+    private boolean outT = true;
     private int position = 0;
     private String cloudreveip;
     private Runnable hideButtonRunnable;
@@ -44,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private Stack<String> history = new Stack<>();
     private View backButton;
     private boolean ifyes = true;
-    @SuppressLint("SetJavaScriptEnabled")
+    private CircularProgressBar circularProgressBar;
+    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,11 +123,14 @@ public class MainActivity extends AppCompatActivity {
          * 下方是 webview 部分
          */
         webView = findViewById(R.id.webview);
+
         WebSettings settings = webView.getSettings();
+
         settings.setDatabaseEnabled(true);
         settings.setGeolocationEnabled(true);
         settings.setDomStorageEnabled(true);//设置可以使用localStorage
         settings.setAllowFileAccess(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);//设置webView自适应屏幕大小
         settings.setBuiltInZoomControls(true);//关闭zoom
@@ -132,6 +138,10 @@ public class MainActivity extends AppCompatActivity {
         settings.setSupportZoom(true);//关闭zoom按钮
         settings.setRenderPriority(WebSettings.RenderPriority.LOW);
         settings.setBlockNetworkImage(true);
+        //反广告
+        String userAgent = settings.getUserAgentString();
+        userAgent += " NoAds";
+        settings.setUserAgentString(userAgent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             settings.setAllowFileAccessFromFileURLs(true);
             settings.setAllowUniversalAccessFromFileURLs(true);
@@ -176,10 +186,20 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageStarted(view, url, favicon);
                 // 页面开始加载
             }
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error){
+                handler.proceed();
+            }
             @SuppressLint("SetTextI18n")
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
+                if (error.getErrorCode() == -6) {
+                    Toast.makeText(MainActivity.this,"请检查网络权限,可能影响内容显示",Toast.LENGTH_SHORT).show();
+                    outT = false;
+                    circularProgressBar.setVisibility(View.GONE);
+                    return;
+                }
                 if (!(error.getErrorCode() == -1)) {
                     Log.d("error", String.valueOf(error.getErrorCode()));
                     webView.setVisibility(View.GONE);
@@ -197,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // 页面加载错误
                 }
-
+                outT = true;
             }
         });
         /**
@@ -207,12 +227,27 @@ public class MainActivity extends AppCompatActivity {
             webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         webView.getSettings().setBlockNetworkImage(false);
-
+        /**
+         * 浏览器进度条
+         */
+        circularProgressBar = findViewById(R.id.circularProgressBar);
 
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
+                circularProgressBar.setProgress(newProgress);
+                if (outT ) {
+                    if (newProgress == 100) {
+                        circularProgressBar.setVisibility(View.GONE);
+                    } else {
+
+                        circularProgressBar.setVisibility(View.VISIBLE);
+                    }
+                }else {
+                    circularProgressBar.setVisibility(View.GONE);
+                }
+                // 当进度达到100时，隐藏加载界面
 
                 if (newProgress == 100) {
                     // 页面加载完成时更新按钮状态
