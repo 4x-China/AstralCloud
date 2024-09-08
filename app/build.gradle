@@ -12,7 +12,6 @@ android {
         versionCode 1
         versionName "1.00.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
     }
     // 自定义打包名称
     android.applicationVariants.all { variant ->
