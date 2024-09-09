@@ -39,6 +39,10 @@
                 android:text="实验按钮 (启动神奇功能)"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/switch1"/>
+        <Switch
+                android:text="删除历史记录和缓存"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/switch2"/>
         <Button
                 android:text="返回"
                 android:alpha="1.0"

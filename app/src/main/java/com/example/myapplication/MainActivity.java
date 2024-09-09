@@ -31,7 +31,7 @@ import java.util.Stack;
 
 @SuppressLint({"MissingInflatedId", "LocalSuppress"})
 public class MainActivity extends AppCompatActivity {
-    private WebView webView;
+    public static WebView webView;
     private boolean outT = true;
     private int position = 0;
     private String cloudreveip;

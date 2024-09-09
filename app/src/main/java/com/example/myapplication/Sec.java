@@ -44,6 +44,12 @@ public class Sec extends AppCompatActivity {
                 writeToFile2("beta=false");
             }
         });
+        Switch switch2 = findViewById(R.id.switch2);
+        switch2.setOnClickListener(v -> {
+            MainActivity.webView.clearCache(true);
+            MainActivity.webView.clearHistory();
+            Toast.makeText(getApplicationContext(),"已清除缓存",Toast.LENGTH_SHORT).show();
+        });
     }
     public void writeToFile2(String data) {
         try {
