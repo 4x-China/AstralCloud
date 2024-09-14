@@ -195,7 +195,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                if (error.getErrorCode() == -6) {
+                if (error.getErrorCode() == -6){
+                    Toast.makeText(MainActivity.this,"请检查网络权限,可能影响内容显示",Toast.LENGTH_SHORT).show();
+                    outT = false;
+                    circularProgressBar.setVisibility(View.GONE);
+                    return;
+                }
+                if (error.getErrorCode() == -10){
                     Toast.makeText(MainActivity.this,"请检查网络权限,可能影响内容显示",Toast.LENGTH_SHORT).show();
                     outT = false;
                     circularProgressBar.setVisibility(View.GONE);
@@ -313,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
         cloudreveip = ip;
         Log.d("地址",ip);
         if (ip.equals("null")) {
+            writeToFile("https://bilibili.com/");
             // 加载新的布局文件
             LayoutInflater inflater = getLayoutInflater();
             View newView = inflater.inflate(R.layout.content_main, null);
