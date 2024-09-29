@@ -24,15 +24,24 @@
             android:layout_height="match_parent" />
     <Button
             android:text="更改服务器"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/round_button"
+            android:color="#ADD8E6"
+            android:radius="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_anchorGravity="bottom|center"
             app:layout_anchor="@+id/webview" android:id="@+id/button2"/>
     <Button
             android:text="返回"
+            android:layout_marginLeft="40dp"
+
+            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_anchorGravity="start|bottom"
             app:layout_anchor="@+id/webview"
             android:id="@+id/backbutton"
+
+            android:background="@drawable/round_button"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:enabled="false"
@@ -46,6 +55,10 @@
     android:visibility="gone"/>
     <Button
             android:text="设置"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="40dp"
+
+            android:background="@drawable/round_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_anchorGravity="end|bottom" app:layout_anchor="@+id/webview"
             android:id="@+id/button_setting"/>

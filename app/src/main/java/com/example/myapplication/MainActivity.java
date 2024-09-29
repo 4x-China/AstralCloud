@@ -32,6 +32,7 @@ import java.util.Stack;
 @SuppressLint({"MissingInflatedId", "LocalSuppress"})
 public class MainActivity extends AppCompatActivity {
     public static WebView webView;
+    public static boolean flag = true;
     private boolean outT = true;
     private int position = 0;
     private String cloudreveip;
@@ -320,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("地址",ip);
         if (ip.equals("null")) {
             writeToFile("https://bilibili.com/");
+            flag = false;
             // 加载新的布局文件
             LayoutInflater inflater = getLayoutInflater();
             View newView = inflater.inflate(R.layout.content_main, null);
@@ -411,15 +413,28 @@ public class MainActivity extends AppCompatActivity {
         hideButtonRunnable = new Runnable() {
             @Override
             public void run() {
-                button.animate().alpha(0).setDuration(2000).start();
-                setbutton.animate().alpha(0).setDuration(2000).start();
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if(flag) {
+                    button.animate().alpha(0).setDuration(3000).start();
+                    setbutton.animate().alpha(0).setDuration(3000).start();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    button.setEnabled(false);
+                    setbutton.setEnabled(false);
+                }else {
+                    button.animate().alpha(0).setDuration(12000).start();
+                    setbutton.animate().alpha(0).setDuration(12000).start();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    button.setEnabled(false);
+                    setbutton.setEnabled(false);
                 }
-                button.setEnabled(false);
-                setbutton.setEnabled(false);
+
             }
         };
         handler.postDelayed(hideButtonRunnable, delayMillis);
