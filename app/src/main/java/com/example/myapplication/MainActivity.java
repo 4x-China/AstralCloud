@@ -332,6 +332,9 @@ public class MainActivity extends AppCompatActivity {
             TextView textView = findViewById(R.id.textView2);
             textView.setText(get());
             Toast.makeText(MainActivity.this,"change CloudReveIP",Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(MainActivity.this,MainActivity.class);
+            startActivity(intent);
         }else{
             webView.loadUrl(ip);
         }
@@ -384,7 +387,6 @@ public class MainActivity extends AppCompatActivity {
             content.append(new String(buffer, StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "读取文件失败", Toast.LENGTH_SHORT).show();
             return "null";
 
         }
@@ -459,7 +461,6 @@ public class MainActivity extends AppCompatActivity {
             content.append(new String(buffer, StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "读取文件失败", Toast.LENGTH_SHORT).show();
             return "null";
 
         }
