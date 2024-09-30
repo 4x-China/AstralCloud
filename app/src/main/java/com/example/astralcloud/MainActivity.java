@@ -674,7 +674,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
         private void mergeParts(String rootPath, String fileName, RandomAccessFile[] parts) throws IOException {
             File outputFile = new File(rootPath, fileName);
             FileOutputStream fos = new FileOutputStream(outputFile);
