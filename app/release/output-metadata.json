@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.myapplication",
+  "applicationId": "com.example.astralcloud",
   "variantName": "release",
   "elements": [
     {
@@ -12,8 +12,8 @@
       "filters": [],
       "attributes": [],
       "versionCode": 1,
-      "versionName": "1.01.3",
-      "outputFile": "AstralCloud_release_v1.01.3.apk"
+      "versionName": "1.01.4",
+      "outputFile": "AstralCloud_release_v1.01.4.apk"
     }
   ],
   "elementType": "File"

@@ -305,12 +305,11 @@ public class MainActivity extends AppCompatActivity {
                 // 自动获取文件名并下载
                 //new DownloadTask().execute(url, contentDisposition);
                 new MuDownloadTask().execute(url, contentDisposition);
-
             }
         });
 
         if (readFile2().equals("beta=true")) {
-
+            Toast.makeText(MainActivity.this,"启用测试",Toast.LENGTH_SHORT);
         }
 
 
@@ -638,7 +637,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String outputPath) {
-            Toast.makeText(MainActivity.this, "文件已下载到 " + outputPath, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "文件已下载到 " + outputPath + "已自动加入到文件管理器界面", Toast.LENGTH_SHORT ).show();
         }
 
         private long getFileSize(String urlString) throws IOException {

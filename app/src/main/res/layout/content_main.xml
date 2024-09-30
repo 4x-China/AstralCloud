@@ -40,6 +40,7 @@
                 android:inputType="text"/>
         <Button
                 android:text="设置"
+                android:background="@drawable/round_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/button5"/>
         <TextView
@@ -49,6 +50,7 @@
     </LinearLayout>
     <Button
             android:text="返回"
+            android:background="@drawable/round_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_anchorGravity="bottom|center"
             app:layout_anchor="@+id/linearLayout" android:id="@+id/button6"/>
