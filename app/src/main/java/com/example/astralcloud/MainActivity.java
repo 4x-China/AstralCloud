@@ -1,13 +1,13 @@
-package com.example.myapplication;
+package com.example.astralcloud;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
+import android.os.*;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +21,9 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Stack;
 
@@ -31,7 +31,9 @@ import java.util.Stack;
 
 @SuppressLint({"MissingInflatedId", "LocalSuppress"})
 public class MainActivity extends AppCompatActivity {
+    public final Context context = this;
     public static WebView webView;
+    private static final int PERMISSION_REQUEST_CODE = 1;
     public static boolean flag = true;
     private boolean outT = true;
     private int position = 0;
@@ -293,16 +295,17 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
+
         });
 
         // 设置DownloadListener
         webView.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                Log.d("文件下载地址",url);
-                startActivity(i);
+                // 自动获取文件名并下载
+                //new DownloadTask().execute(url, contentDisposition);
+                new MuDownloadTask().execute(url, contentDisposition);
+
             }
         });
 
@@ -378,7 +381,6 @@ public class MainActivity extends AppCompatActivity {
             valueCallback = null;
         }
     }
-
     private String readFile() {
         StringBuilder content = new StringBuilder();
         try {
@@ -395,7 +397,6 @@ public class MainActivity extends AppCompatActivity {
         return content.toString();
 
     }
-
     private void writeToFile(String data) {
         try {
             FileOutputStream fos = openFileOutput("serveripcloudreve.prop", MODE_PRIVATE);
@@ -481,5 +482,214 @@ public class MainActivity extends AppCompatActivity {
         }
         return content.toString();
 
+    }
+    private String parseFileName(String contentDisposition) {
+        if (contentDisposition != null && !contentDisposition.isEmpty()) {
+            String[] parts = contentDisposition.split(";");
+            for (String part : parts) {
+                if (part.trim().startsWith("filename")) {
+                    String filename = part.substring(part.indexOf('=') + 1).trim();
+                    if (filename.startsWith("\"") && filename.endsWith("\"")) {
+                        filename = filename.substring(1, filename.length() - 1);
+                    }
+                    return filename;
+                }
+            }
+        }
+        return null;
+    }
+    private class DownloadTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            String contentDisposition = params[1];
+
+            // 解析文件名
+            String fileName = parseFileName(contentDisposition);
+            if (fileName == null || fileName.isEmpty()) {
+                fileName = "downloadedfile.zip"; // 默认文件名
+            }
+
+            // 保存路径
+            String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download";
+            File rootDir = new File(rootPath);
+            if (!rootDir.exists()) {
+                rootDir.mkdirs();
+            }
+
+            String outputPath = rootPath + "/" + fileName;
+
+            // 下载文件
+            download(url, outputPath);
+            return outputPath;
+        }
+
+        @Override
+        protected void onPostExecute(String outputPath) {
+            Toast.makeText(MainActivity.this, "文件已下载到 " + outputPath, Toast.LENGTH_SHORT).show();
+            // 通知媒体扫描服务
+
+
+        }
+
+        private void download(String url, String outputPath) {
+            HttpURLConnection connection = null;
+            try {
+                URL u = new URL(url);
+                connection = (HttpURLConnection) u.openConnection();
+                connection.setRequestMethod("GET");
+
+                File outputFile = new File(outputPath);
+                FileOutputStream fos = new FileOutputStream(outputFile);
+
+                InputStream is = connection.getInputStream();
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, bytesRead);
+                }
+
+                fos.close();
+                is.close();
+                String mimeType = "text/plain";
+                MediaScannerConnection.scanFile(context,
+                        new String[]{outputFile.getAbsolutePath()}, new String[]{mimeType}, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "下载失败", Toast.LENGTH_SHORT).show();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+        }
+    }
+    private class MuDownloadTask extends AsyncTask<String, Integer, String> {
+        private static final int THREAD_COUNT = 4; // 可以调整线程数量
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            String contentDisposition = params[1];
+
+            // 解析文件名
+            String fileName = parseFileName(contentDisposition);
+            if (fileName == null || fileName.isEmpty()) {
+                fileName = "downloadedfile.zip"; // 默认文件名
+            }
+
+            // 保存路径
+            String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download";
+            File rootDir = new File(rootPath);
+            if (!rootDir.exists()) {
+                rootDir.mkdirs();
+            }
+
+            String outputPath = rootPath + "/" + fileName;
+
+            // 获取文件大小
+            long fileSize = 0;
+            try {
+                fileSize = getFileSize(url);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // 分割文件
+            long chunkSize = fileSize / THREAD_COUNT;
+            Thread[] threads = new Thread[THREAD_COUNT];
+            RandomAccessFile[] parts = new RandomAccessFile[THREAD_COUNT];
+
+            try {
+                for (int i = 0; i < THREAD_COUNT; i++) {
+                    long start = i * chunkSize;
+                    long end = (i == THREAD_COUNT - 1) ? fileSize : start + chunkSize;
+
+                    File partFile = new File(rootPath, fileName + ".part" + i);
+                    parts[i] = new RandomAccessFile(partFile, "rw");
+
+                    int finalI = i;
+                    threads[i] = new Thread(() -> {
+                        downloadPart(url, parts[finalI], start, end);
+                    });
+                    threads[i].start();
+                }
+
+                for (Thread thread : threads) {
+                    thread.join();
+                }
+
+                // 合并文件
+                mergeParts(rootPath, fileName, parts);
+
+                // 删除临时文件
+                for (int i = 0; i < THREAD_COUNT; i++) {
+                    parts[i].close();
+                    File partFile = new File(rootPath, fileName + ".part" + i);
+                    partFile.delete();
+                }
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            return outputPath;
+        }
+
+        @Override
+        protected void onPostExecute(String outputPath) {
+            Toast.makeText(MainActivity.this, "文件已下载到 " + outputPath, Toast.LENGTH_SHORT).show();
+        }
+
+        private long getFileSize(String urlString) throws IOException {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("HEAD");
+            long size = connection.getContentLengthLong();
+            connection.disconnect();
+            return size;
+        }
+
+        private void downloadPart(String urlString, RandomAccessFile part, long start, long end) {
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(urlString);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("Range", "bytes=" + start + "-" + end);
+                connection.setRequestMethod("GET");
+
+                InputStream is = connection.getInputStream();
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer)) != -1) {
+                    part.write(buffer, 0, bytesRead);
+                }
+
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+        }
+
+        private void mergeParts(String rootPath, String fileName, RandomAccessFile[] parts) throws IOException {
+            File outputFile = new File(rootPath, fileName);
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            for (RandomAccessFile part : parts) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = part.read(buffer)) != -1) {
+                    fos.write(buffer, 0, bytesRead);
+                }
+            }
+            String mimeType = "text/plain";
+            MediaScannerConnection.scanFile(context,
+                    new String[]{outputFile.getAbsolutePath()}, new String[]{mimeType}, null);
+            fos.close();
+        }
     }
 }

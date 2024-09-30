@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_anchorGravity="end|bottom" app:layout_anchor="@+id/webview"
             android:id="@+id/button_setting"/>
-    <com.example.myapplication.CircularProgressBar
+    <com.example.astralcloud.CircularProgressBar
             android:id="@+id/circularProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

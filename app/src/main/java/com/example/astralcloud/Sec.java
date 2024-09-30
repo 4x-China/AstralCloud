@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.astralcloud;
 
 import android.content.Intent;
 import android.os.Bundle;
