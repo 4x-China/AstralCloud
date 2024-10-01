@@ -26,6 +26,16 @@ public class Sec extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button xiazai = findViewById(R.id.xiazai);
+        xiazai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                Intent intent = new Intent(Sec.this, DownActi.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                startActivity(intent);
+            }
+        });
         secCreate();
     }
     public void secCreate() {

@@ -43,6 +43,9 @@
                 android:text="删除历史记录和缓存"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/switch2"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="打开下载"
+                android:id="@+id/xiazai"/>
         <Button
                 android:text="返回"
                 android:alpha="1.0"

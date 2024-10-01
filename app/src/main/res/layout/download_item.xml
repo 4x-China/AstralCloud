@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="8dp">
+    <androidx.appcompat.widget.LinearLayoutCompat android:layout_width="match_parent"
+                                                  android:layout_height="wrap_content"
+                                                  android:orientation="horizontal">
+
+        <TextView
+                android:text="TextView"
+                android:textSize="20dp"
+                android:layout_height="wrap_content" android:id="@+id/textView" android:layout_weight="1"
+                android:layout_width="wrap_content"/>
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar" android:layout_weight="3"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.LinearLayoutCompat android:layout_width="wrap_content"
+                                                  android:layout_height="300dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:id="@+id/mulu"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <Button
+            android:text="取消"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/button"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat android:layout_width="match_parent"
+                                                  android:layout_height="wrap_content"
+                                                  android:orientation="horizontal">
+        <Button
+                android:text="上一个"
+                android:layout_width="match_parent"
+                android:layout_weight="3"
+                android:layout_height="wrap_content" android:id="@+id/last"/>
+        <Button
+                android:text="下一个"
+                android:layout_width="match_parent"
+                android:layout_weight="3"
+                android:layout_height="wrap_content" android:id="@+id/next"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>

@@ -1,8 +1,11 @@
 package com.example.astralcloud;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -25,6 +28,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 
@@ -36,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
     public static boolean flag = true;
     private boolean outT = true;
+    private List<String> downloadNames = Arrays.asList();
     private int position = 0;
     private String cloudreveip;
     private Runnable hideButtonRunnable;
@@ -103,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+
                 TextView textView = findViewById(R.id.textView2);
                 textView.setText(get());
                 Toast.makeText(MainActivity.this,"change CloudReveIP",Toast.LENGTH_SHORT).show();
@@ -303,8 +310,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
                 // 自动获取文件名并下载
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("下载确认")
+                        .setMessage("你即将下载: " + contentDisposition)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new MuDownloadTask().execute(url, contentDisposition);
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // 用户点击了取消按钮后的操作
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
                 //new DownloadTask().execute(url, contentDisposition);
-                new MuDownloadTask().execute(url, contentDisposition);
             }
         });
 
@@ -565,7 +586,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private class MuDownloadTask extends AsyncTask<String, Integer, String> {
         private static final int THREAD_COUNT = 4; // 可以调整线程数量
-
+        private String filename;
         @Override
         protected String doInBackground(String... params) {
             String url = params[0];
@@ -576,7 +597,7 @@ public class MainActivity extends AppCompatActivity {
             if (fileName == null || fileName.isEmpty()) {
                 fileName = "downloadedfile.zip"; // 默认文件名
             }
-
+            this.filename = fileName;
             // 保存路径
             String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download";
             File rootDir = new File(rootPath);
@@ -688,6 +709,13 @@ public class MainActivity extends AppCompatActivity {
             MediaScannerConnection.scanFile(context,
                     new String[]{outputFile.getAbsolutePath()}, new String[]{mimeType}, null);
             fos.close();
+        }
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            SharedPreferences sharedPreferences = getSharedPreferences("Download", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("DOWN:" + this.filename ,progress[0]);
+            editor.apply();
         }
     }
 }

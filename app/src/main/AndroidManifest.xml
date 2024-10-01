@@ -38,6 +38,16 @@
 
         </activity>
         <activity
+                android:name=".DownActi"
+                android:exported="true"
+                android:label="Download"
+                android:theme="@style/Theme.MyApplication"
+                android:hardwareAccelerated="true"
+                android:configChanges="uiMode|screenSize|smallestScreenSize"
+                android:resizeableActivity="true">
+
+        </activity>
+        <activity
                 android:name=".Sec">
 
         </activity>
