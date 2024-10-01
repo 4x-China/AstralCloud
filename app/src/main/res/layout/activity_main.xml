@@ -24,20 +24,21 @@
             android:layout_height="match_parent" />
     <Button
             android:text="更改服务器"
+            android:textSize="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/round_button"
             android:color="#ADD8E6"
             android:radius="100dp"
-            android:layout_width="wrap_content"
+            android:layout_width="77dp"
             android:layout_height="wrap_content" app:layout_anchorGravity="bottom|center"
             app:layout_anchor="@+id/webview" android:id="@+id/button2"/>
     <Button
-            android:text="+"
+            android:text="⚪"
             android:textSize="10dp"
             android:layout_marginLeft="40dp"
             android:layout_marginBottom="60dp"
-            android:layout_width="29dp"
-            android:layout_height="29dp" app:layout_anchorGravity="start|bottom"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content" app:layout_anchorGravity="start|bottom"
             app:layout_anchor="@+id/webview"
             android:id="@+id/a1"
             android:background="@drawable/round_button"
@@ -67,11 +68,12 @@
     android:visibility="gone"/>
     <Button
             android:text="设置"
+            android:textSize="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="40dp"
 
             android:background="@drawable/round_button"
-            android:layout_width="wrap_content"
+            android:layout_width="68dp"
             android:layout_height="wrap_content" app:layout_anchorGravity="end|bottom" app:layout_anchor="@+id/webview"
             android:id="@+id/button_setting"/>
     <com.example.astralcloud.CircularProgressBar
