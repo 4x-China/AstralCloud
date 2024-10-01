@@ -129,6 +129,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences sharedPreferences = getSharedPreferences("Download", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences.OnSharedPreferenceChangeListener listener = (prefs, key) -> {
+            Log.d("TAG", "Preference changed: " + key);
+        };
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
         /**
          * 以上是按钮和页面部分
          * 下方是 webview 部分
@@ -315,7 +321,8 @@ public class MainActivity extends AppCompatActivity {
                         .setMessage("你即将下载: " + contentDisposition)
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                new MuDownloadTask().execute(url, contentDisposition);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                startActivity(intent);
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -361,7 +368,18 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this,MainActivity.class);
             startActivity(intent);
         }else{
-            webView.loadUrl(ip);
+            Intent intent = getIntent();
+            try {
+                if(!(intent.getStringExtra("cloudreveip").equals("no"))) {
+                    webView.loadUrl(intent.getStringExtra("cloudreveip"));
+                }else {
+                }
+            }catch (Exception e) {
+                webView.loadUrl(ip);
+
+
+            }
+
         }
 
         // 检查是否有权限
@@ -381,6 +399,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         }
+        Button button = findViewById(R.id.a1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Sec.class);
+                SharedPreferences sharedPreferences = getSharedPreferences("data", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("cloudreveip", webView.getUrl());
+                editor.commit();
+                Log.d("cloudreveip", cloudreveip);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -519,11 +551,12 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
     private class DownloadTask extends AsyncTask<String, Void, String> {
+        private String filename;
         @Override
         protected String doInBackground(String... params) {
             String url = params[0];
             String contentDisposition = params[1];
-
+            this.filename = filename;
             // 解析文件名
             String fileName = parseFileName(contentDisposition);
             if (fileName == null || fileName.isEmpty()) {
@@ -582,7 +615,9 @@ public class MainActivity extends AppCompatActivity {
                     connection.disconnect();
                 }
             }
+
         }
+
     }
     private class MuDownloadTask extends AsyncTask<String, Integer, String> {
         private static final int THREAD_COUNT = 4; // 可以调整线程数量

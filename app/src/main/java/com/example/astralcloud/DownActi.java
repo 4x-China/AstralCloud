@@ -11,8 +11,6 @@ public class DownActi extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.download_item);
-        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
     }
 }
