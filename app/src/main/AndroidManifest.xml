@@ -15,7 +15,8 @@
             android:label="AstralCloud"
             android:roundIcon="@drawable/icon_xxhdpi"
             android:supportsRtl="true"
-            android:theme="@style/Theme.MyApplication"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+
             android:usesCleartextTraffic="true"
             tools:targetApi="31">
         <meta-data

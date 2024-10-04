@@ -10,7 +10,7 @@ android {
         minSdk 30
         targetSdk 33
         versionCode 1
-        versionName "1.01.5"
+        versionName "1.01.6b"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     // 自定义打包名称

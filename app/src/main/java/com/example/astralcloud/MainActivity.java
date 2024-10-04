@@ -13,9 +13,7 @@ import android.net.http.SslError;
 import android.os.*;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.webkit.*;
 import android.widget.Button;
 import android.widget.EditText;
@@ -413,8 +411,73 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // 隐藏状态栏和导航栏
+        hideSystemUI();
+        hideBottomUIMenu();
+        // 获取Window对象
+        Window window = getWindow();
+// 隐藏底部导航栏
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
+
+    protected void hideBottomUIMenu() {
+        int flags;
+        int curApiVersion = android.os.Build.VERSION.SDK_INT;
+        // This work only for android 4.4+
+        if(curApiVersion >= Build.VERSION_CODES.KITKAT){
+
+            // This work only for android 4.4+
+            // hide navigation bar permanently in android activity
+            // touch the screen, the navigation bar will not show
+
+            flags = View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        }else{
+            // touch the screen, the navigation bar will show
+            flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        }
+
+        // must be executed in main thread :)
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+    }
+    private void hideSystemUI() {
+        // 隐藏状态栏和导航栏
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        // 用户离开时恢复系统UI
+        showSystemUI();
+    }
+
+    private void showSystemUI() {
+        // 恢复状态栏和导航栏
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
